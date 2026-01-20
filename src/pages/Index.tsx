@@ -107,9 +107,6 @@ const Index = () => {
                 How are you feeling?
                 <ArrowRight className="w-5 h-5" />
               </Button>
-              <Button variant="outline" size="xl">
-                Learn More
-              </Button>
             </motion.div>
 
             <motion.div
