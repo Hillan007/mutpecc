@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Menu, X, Heart, User } from "lucide-react";
+import { Menu, X, Heart, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -17,22 +18,25 @@ const navLinks = [
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, role, signOut, loading } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-xl gradient-sage flex items-center justify-center shadow-soft">
               <Heart className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-serif font-bold text-foreground">
-              MUTPECC
-            </span>
+            <span className="text-xl font-serif font-bold text-foreground">MUTPECC</span>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
@@ -50,32 +54,41 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Auth Buttons */}
           <div className="hidden lg:flex items-center gap-3">
-            <Button variant="ghost" size="sm">
-              <User className="w-4 h-4 mr-2" />
-              Login
-            </Button>
-            <Button variant="hero" size="sm">
-              Get Started
-            </Button>
+            {!loading && user ? (
+              <>
+                <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
+                  <User className="w-4 h-4 mr-2" />
+                  Dashboard
+                  {role && <span className="ml-1 text-xs text-primary">({role})</span>}
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleSignOut}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" onClick={() => navigate("/auth")}>
+                  <User className="w-4 h-4 mr-2" />
+                  Login
+                </Button>
+                <Button variant="hero" size="sm" onClick={() => navigate("/auth")}>
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden p-2 rounded-lg hover:bg-muted transition-colors"
           >
-            {isMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <motion.div
         initial={false}
         animate={isMenuOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
@@ -98,13 +111,27 @@ export function Header() {
             </Link>
           ))}
           <div className="pt-4 flex flex-col gap-2">
-            <Button variant="outline" className="w-full">
-              <User className="w-4 h-4 mr-2" />
-              Login
-            </Button>
-            <Button variant="hero" className="w-full">
-              Get Started
-            </Button>
+            {user ? (
+              <>
+                <Button variant="outline" className="w-full" onClick={() => { navigate("/dashboard"); setIsMenuOpen(false); }}>
+                  <User className="w-4 h-4 mr-2" />
+                  Dashboard
+                </Button>
+                <Button variant="ghost" className="w-full" onClick={() => { handleSignOut(); setIsMenuOpen(false); }}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" className="w-full" onClick={() => { navigate("/auth"); setIsMenuOpen(false); }}>
+                  Login
+                </Button>
+                <Button variant="hero" className="w-full" onClick={() => { navigate("/auth"); setIsMenuOpen(false); }}>
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
         </nav>
       </motion.div>

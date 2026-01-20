@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Heart, Shield, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 type MoodType = "happy" | "sad" | "anxious" | "angry" | "confused" | "hopeful" | null;
 
@@ -21,6 +23,7 @@ interface MoodCheckInModalProps {
 }
 
 export function MoodCheckInModal({ isOpen, onClose }: MoodCheckInModalProps) {
+  const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [selectedMood, setSelectedMood] = useState<MoodType>(null);
   const [feelings, setFeelings] = useState("");
@@ -29,11 +32,30 @@ export function MoodCheckInModal({ isOpen, onClose }: MoodCheckInModalProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = () => {
-    // TODO: Submit to backend
-    console.log({ selectedMood, feelings, reason, solution, name, phone, email });
-    onClose();
+  const handleSubmit = async () => {
+    if (!selectedMood || !name || !email) return;
+    setIsSubmitting(true);
+    
+    const { error } = await supabase.from("mood_forms").insert({
+      mood: selectedMood,
+      feelings: feelings || null,
+      cause: reason || null,
+      proposed_solution: solution || null,
+      name,
+      phone: phone || "N/A",
+      email,
+    });
+
+    setIsSubmitting(false);
+    
+    if (error) {
+      toast({ title: "Error", description: "Failed to submit. Please try again.", variant: "destructive" });
+    } else {
+      toast({ title: "Thank you!", description: "A counselor will reach out to you soon." });
+      onClose();
+    }
   };
 
   const canProceed = () => {
