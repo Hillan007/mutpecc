@@ -12,6 +12,7 @@ import Activities from "./pages/Activities";
 import AskExecutive from "./pages/AskExecutive";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import Community from "./pages/Community";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/ask-executive" element={<AskExecutive />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/community" element={<Community />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

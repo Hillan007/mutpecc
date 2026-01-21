@@ -6,10 +6,13 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingButtons } from "@/components/FloatingButtons";
 import { MoodCheckInModal } from "@/components/MoodCheckInModal";
+import { QuickBookModal } from "@/components/QuickBookModal";
+import { Link } from "react-router-dom";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const Index = () => {
   const [showMoodModal, setShowMoodModal] = useState(false);
+  const [showQuickBook, setShowQuickBook] = useState(false);
 
   useEffect(() => {
     const hasSeenModal = sessionStorage.getItem("mutpecc-mood-checked");
@@ -27,6 +30,7 @@ const Index = () => {
       <Header />
       <FloatingButtons />
       <MoodCheckInModal isOpen={showMoodModal} onClose={() => setShowMoodModal(false)} />
+      <QuickBookModal isOpen={showQuickBook} onClose={() => setShowQuickBook(false)} />
 
       {/* Hero & Main Actions */}
       <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 min-h-[90vh] flex items-center">
@@ -74,24 +78,27 @@ const Index = () => {
               className="grid gap-4 sm:grid-cols-2"
             >
               {/* Primary Action: Book */}
-              <button className="flex flex-col items-start p-6 bg-primary text-primary-foreground rounded-2xl shadow-xl hover:translate-y-[-4px] transition-all group text-left">
+              <button 
+                onClick={() => setShowQuickBook(true)}
+                className="flex flex-col items-start p-6 bg-primary text-primary-foreground rounded-2xl shadow-xl hover:translate-y-[-4px] transition-all group text-left"
+              >
                 <Calendar className="w-8 h-8 mb-4 opacity-80" />
                 <h3 className="text-xl font-bold mb-1">Book a Session</h3>
                 <p className="text-sm opacity-90 mb-4">Talk to a professional counselor privately.</p>
                 <div className="mt-auto flex items-center gap-2 font-semibold">
-                  Schedule Now <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  Quick Book <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
               </button>
 
               {/* Action: Log In */}
-              <button className="flex flex-col items-start p-6 bg-card border-2 border-border rounded-2xl shadow-sm hover:border-primary/50 transition-all text-left">
+              <Link to="/auth" className="flex flex-col items-start p-6 bg-card border-2 border-border rounded-2xl shadow-sm hover:border-primary/50 transition-all text-left">
                 <LogIn className="w-8 h-8 mb-4 text-primary" />
                 <h3 className="text-xl font-bold mb-1">Member Login</h3>
                 <p className="text-sm text-muted-foreground mb-4">Access your dashboard and past sessions.</p>
                 <div className="mt-auto flex items-center gap-2 text-primary font-semibold">
                   Sign In <ArrowRight className="w-4 h-4" />
                 </div>
-              </button>
+              </Link>
 
               {/* Action: Mood Check */}
               <button 
@@ -107,14 +114,14 @@ const Index = () => {
               </button>
 
               {/* Action: Join */}
-              <button className="flex flex-col items-start p-6 bg-secondary rounded-2xl shadow-sm hover:bg-secondary/80 transition-all text-left">
+              <Link to="/community" className="flex flex-col items-start p-6 bg-secondary rounded-2xl shadow-sm hover:bg-secondary/80 transition-all text-left">
                 <UserPlus className="w-8 h-8 mb-4 text-foreground" />
                 <h3 className="text-xl font-bold mb-1">Join Community</h3>
-                <p className="text-sm text-muted-foreground mb-4">Become a member or apply as a counselor.</p>
+                <p className="text-sm text-muted-foreground mb-4">Connect with our supportive community.</p>
                 <div className="mt-auto flex items-center gap-2 font-semibold">
                   Get Started <ArrowRight className="w-4 h-4" />
                 </div>
-              </button>
+              </Link>
             </motion.div>
 
           </div>

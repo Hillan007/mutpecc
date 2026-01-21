@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       activities: {
         Row: {
+          activity_date: string | null
           activity_type: string | null
           created_at: string
           created_by: string | null
@@ -26,6 +27,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          activity_date?: string | null
           activity_type?: string | null
           created_at?: string
           created_by?: string | null
@@ -36,6 +38,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          activity_date?: string | null
           activity_type?: string | null
           created_at?: string
           created_by?: string | null
@@ -44,6 +47,48 @@ export type Database = {
           is_published?: boolean | null
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      community_links: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          is_premium: boolean | null
+          link_type: string
+          sort_order: number | null
+          title: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_premium?: boolean | null
+          link_type?: string
+          sort_order?: number | null
+          title: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_premium?: boolean | null
+          link_type?: string
+          sort_order?: number | null
+          title?: string
+          updated_at?: string
+          url?: string
         }
         Relationships: []
       }
@@ -206,33 +251,78 @@ export type Database = {
       qa_threads: {
         Row: {
           created_at: string
+          guest_email: string | null
+          guest_name: string | null
+          guest_phone: string | null
           id: string
           is_public: boolean | null
           question: string
           replied_at: string | null
           replied_by: string | null
           reply: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
+          guest_email?: string | null
+          guest_name?: string | null
+          guest_phone?: string | null
           id?: string
           is_public?: boolean | null
           question: string
           replied_at?: string | null
           replied_by?: string | null
           reply?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
+          guest_email?: string | null
+          guest_name?: string | null
+          guest_phone?: string | null
           id?: string
           is_public?: boolean | null
           question?: string
           replied_at?: string | null
           replied_by?: string | null
           reply?: string | null
-          user_id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      quick_bookings: {
+        Row: {
+          contacted_at: string | null
+          contacted_by: string | null
+          created_at: string
+          email: string
+          id: string
+          is_contacted: boolean | null
+          message: string | null
+          name: string
+          phone: string
+        }
+        Insert: {
+          contacted_at?: string | null
+          contacted_by?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          is_contacted?: boolean | null
+          message?: string | null
+          name: string
+          phone: string
+        }
+        Update: {
+          contacted_at?: string | null
+          contacted_by?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          is_contacted?: boolean | null
+          message?: string | null
+          name?: string
+          phone?: string
         }
         Relationships: []
       }
@@ -345,12 +435,18 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_approved_member: { Args: { _user_id: string }; Returns: boolean }
       is_counselor: { Args: { _user_id: string }; Returns: boolean }
       is_executive: { Args: { _user_id: string }; Returns: boolean }
       is_member: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "member" | "counselor" | "executive"
+      app_role:
+        | "member"
+        | "counselor"
+        | "executive"
+        | "pending_member"
+        | "candidate"
       application_status: "pending" | "approved" | "rejected"
       mood_type:
         | "happy"
@@ -494,7 +590,13 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["member", "counselor", "executive"],
+      app_role: [
+        "member",
+        "counselor",
+        "executive",
+        "pending_member",
+        "candidate",
+      ],
       application_status: ["pending", "approved", "rejected"],
       mood_type: [
         "happy",
