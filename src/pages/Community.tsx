@@ -8,7 +8,8 @@ import {
   Facebook, 
   Youtube,
   Lock,
-  ExternalLink
+  ExternalLink,
+  Phone
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -87,6 +88,10 @@ const Community = () => {
     }
   };
 
+  // Default WhatsApp contact number - replace with actual number
+  const whatsappNumber = "+254700000000";
+  const whatsappChatUrl = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}?text=Hello%2C%20I%20would%20like%20to%20connect%20with%20MUTPECC`;
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -121,11 +126,46 @@ const Community = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-12">
             
-            {/* Public Links */}
+            {/* Direct WhatsApp Chat */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
+            >
+              <Card className="border-2 border-green-200 bg-green-50/50">
+                <CardContent className="p-6">
+                  <div className="flex flex-col md:flex-row items-center gap-6">
+                    <div className="w-20 h-20 rounded-2xl bg-green-500 flex items-center justify-center flex-shrink-0">
+                      <MessageCircle className="w-10 h-10 text-white" />
+                    </div>
+                    <div className="flex-1 text-center md:text-left">
+                      <h3 className="text-xl font-serif font-bold text-foreground mb-2">
+                        Chat with Us on WhatsApp
+                      </h3>
+                      <p className="text-muted-foreground mb-4">
+                        Have a question? Start a conversation with our team directly on WhatsApp. 
+                        We're here to help and support you.
+                      </p>
+                      <a
+                        href={whatsappChatUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-semibold transition-colors"
+                      >
+                        <Phone className="w-5 h-5" />
+                        Start Chat
+                      </a>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Public Links */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
             >
               <Card>
                 <CardHeader>

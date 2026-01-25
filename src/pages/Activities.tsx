@@ -1,42 +1,53 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, BookOpen, Users, Heart } from "lucide-react";
+import { Sparkles, Heart, BookOpen, Users, Calendar } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingButtons } from "@/components/FloatingButtons";
+import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
-// Sample activities data
-const activities = [
-  {
-    id: 1,
-    title: "Daily Gratitude Practice",
-    description: "Start each day by listing three things you're grateful for. Share with the community if comfortable.",
-    icon: Heart,
-    category: "Mindfulness",
-  },
-  {
-    id: 2,
-    title: "Journaling Challenge",
-    description: "Spend 10 minutes each day writing about your thoughts and feelings. No judgment, just expression.",
-    icon: BookOpen,
-    category: "Self-Reflection",
-  },
-  {
-    id: 3,
-    title: "Peer Support Buddy",
-    description: "Connect with another member for weekly check-ins. Build meaningful supportive relationships.",
-    icon: Users,
-    category: "Community",
-  },
-  {
-    id: 4,
-    title: "Mindful Breathing",
-    description: "Practice 5 minutes of deep breathing exercises. Perfect for managing stress and anxiety.",
-    icon: Sparkles,
-    category: "Wellness",
-  },
-];
+type Activity = Database["public"]["Tables"]["activities"]["Row"];
+
+const getActivityIcon = (type: string | null) => {
+  switch (type?.toLowerCase()) {
+    case "workshop":
+      return BookOpen;
+    case "group session":
+    case "support group":
+      return Users;
+    case "meditation":
+      return Heart;
+    default:
+      return Sparkles;
+  }
+};
 
 const Activities = () => {
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchActivities();
+  }, []);
+
+  const fetchActivities = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("activities")
+        .select("*")
+        .eq("is_published", true)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      if (data) setActivities(data);
+    } catch (error) {
+      console.error("Error fetching activities:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -69,35 +80,78 @@ const Activities = () => {
       {/* Activities Grid */}
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {activities.map((activity, index) => (
-              <motion.article
-                key={activity.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-card rounded-2xl p-8 shadow-soft hover:shadow-elevated transition-shadow duration-300"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 rounded-xl gradient-sage flex items-center justify-center flex-shrink-0">
-                    <activity.icon className="w-7 h-7 text-primary-foreground" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-medium text-primary uppercase tracking-wider">
-                      {activity.category}
-                    </span>
-                    <h3 className="text-xl font-serif font-semibold text-foreground mt-1 mb-2">
-                      {activity.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {activity.description}
-                    </p>
-                  </div>
-                </div>
-              </motion.article>
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Loading activities...</p>
+            </div>
+          ) : activities.length === 0 ? (
+            <div className="text-center py-12 max-w-md mx-auto">
+              <Sparkles className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">No Activities Yet</h3>
+              <p className="text-muted-foreground">
+                Check back soon for new activities and challenges!
+              </p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {activities.map((activity, index) => {
+                const IconComponent = getActivityIcon(activity.activity_type);
+                return (
+                  <motion.article
+                    key={activity.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-shadow duration-300"
+                  >
+                    {/* Activity Image */}
+                    {activity.image_url && (
+                      <div className="h-48 overflow-hidden">
+                        <img
+                          src={activity.image_url}
+                          alt={activity.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+
+                    {/* Content */}
+                    <div className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-xl gradient-sage flex items-center justify-center flex-shrink-0">
+                          <IconComponent className="w-7 h-7 text-primary-foreground" />
+                        </div>
+                        <div className="flex-1">
+                          <span className="text-xs font-medium text-primary uppercase tracking-wider">
+                            {activity.activity_type || "General"}
+                          </span>
+                          <h3 className="text-xl font-serif font-semibold text-foreground mt-1 mb-2">
+                            {activity.title}
+                          </h3>
+                          {activity.description && (
+                            <p className="text-muted-foreground text-sm leading-relaxed">
+                              {activity.description}
+                            </p>
+                          )}
+                          {activity.activity_date && (
+                            <div className="flex items-center gap-1.5 text-xs text-primary mt-3">
+                              <Calendar className="w-3 h-3" />
+                              {new Date(activity.activity_date).toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.article>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
