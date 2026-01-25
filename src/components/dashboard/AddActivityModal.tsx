@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Activity } from "lucide-react";
+import { X, Activity, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +18,8 @@ export function AddActivityModal({ isOpen, onClose, onSuccess }: AddActivityModa
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [activityType, setActivityType] = useState("");
+  const [activityDate, setActivityDate] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,6 +33,8 @@ export function AddActivityModal({ isOpen, onClose, onSuccess }: AddActivityModa
         title: title.trim(),
         description: description.trim() || null,
         activity_type: activityType.trim() || null,
+        activity_date: activityDate ? new Date(activityDate).toISOString() : null,
+        image_url: imageUrl.trim() || null,
         created_by: user.id,
         is_published: true,
       });
@@ -49,6 +53,8 @@ export function AddActivityModal({ isOpen, onClose, onSuccess }: AddActivityModa
         setTitle("");
         setDescription("");
         setActivityType("");
+        setActivityDate("");
+        setImageUrl("");
         onClose();
         onSuccess();
       }
@@ -70,7 +76,7 @@ export function AddActivityModal({ isOpen, onClose, onSuccess }: AddActivityModa
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="relative w-full max-w-md bg-card rounded-2xl shadow-elevated p-6"
+            className="relative w-full max-w-md bg-card rounded-2xl shadow-elevated p-6 max-h-[90vh] overflow-y-auto"
           >
             <button
               onClick={onClose}
@@ -125,6 +131,44 @@ export function AddActivityModal({ isOpen, onClose, onSuccess }: AddActivityModa
                   <option value="Training">Training</option>
                   <option value="Other">Other</option>
                 </select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-foreground">
+                  Activity Date (for auto-expiry)
+                </label>
+                <input
+                  type="datetime-local"
+                  value={activityDate}
+                  onChange={(e) => setActivityDate(e.target.value)}
+                  className="w-full mt-1 px-4 py-3 rounded-xl border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4" />
+                  Cover Image URL
+                </label>
+                <input
+                  type="url"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                  className="w-full mt-1 px-4 py-3 rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                {imageUrl && (
+                  <div className="mt-2 rounded-xl overflow-hidden h-32 bg-muted">
+                    <img
+                      src={imageUrl}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
               </div>
 
               <div>

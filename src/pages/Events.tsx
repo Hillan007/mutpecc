@@ -1,62 +1,40 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingButtons } from "@/components/FloatingButtons";
-import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
-// Sample events data
-const events = [
-  {
-    id: 1,
-    title: "Weekly Support Circle",
-    description: "Join our weekly group session for members to share experiences and support each other.",
-    date: "Every Wednesday",
-    time: "6:00 PM - 7:30 PM",
-    location: "Virtual (Zoom)",
-    attendees: 24,
-    type: "recurring",
-  },
-  {
-    id: 2,
-    title: "Anxiety Management Workshop",
-    description: "A practical workshop on techniques to manage anxiety in daily life.",
-    date: "Jan 28, 2024",
-    time: "2:00 PM - 4:00 PM",
-    location: "MUTPECC Center",
-    attendees: 15,
-    type: "workshop",
-  },
-  {
-    id: 3,
-    title: "Counselor Training: Module 3",
-    description: "Advanced listening skills and empathy training for aspiring counselors.",
-    date: "Feb 5, 2024",
-    time: "10:00 AM - 1:00 PM",
-    location: "Virtual (Zoom)",
-    attendees: 8,
-    type: "training",
-  },
-  {
-    id: 4,
-    title: "Community Wellness Day",
-    description: "A full day of wellness activities, talks, and networking with the MUTPECC community.",
-    date: "Feb 15, 2024",
-    time: "9:00 AM - 5:00 PM",
-    location: "Community Hall",
-    attendees: 50,
-    type: "special",
-  },
-];
-
-const typeColors: Record<string, string> = {
-  recurring: "bg-sage-100 text-sage-700",
-  workshop: "bg-coral-100 text-coral-600",
-  training: "bg-blue-100 text-blue-700",
-  special: "bg-purple-100 text-purple-700",
-};
+type Event = Database["public"]["Tables"]["events"]["Row"];
 
 const Events = () => {
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("events")
+        .select("*")
+        .eq("is_published", true)
+        .gte("event_date", new Date().toISOString())
+        .order("event_date", { ascending: true });
+
+      if (error) throw error;
+      if (data) setEvents(data);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -90,60 +68,85 @@ const Events = () => {
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-6">
-            {events.map((event, index) => (
-              <motion.article
-                key={event.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-card rounded-2xl p-6 shadow-soft hover:shadow-elevated transition-shadow duration-300"
-              >
-                <div className="flex flex-col md:flex-row md:items-start gap-6">
-                  {/* Date Box */}
-                  <div className="flex-shrink-0 w-20 h-20 rounded-xl gradient-sage flex flex-col items-center justify-center text-primary-foreground">
-                    <span className="text-2xl font-bold">
-                      {event.date.includes(",") ? event.date.split(" ")[1].replace(",", "") : "—"}
-                    </span>
-                    <span className="text-sm opacity-80">
-                      {event.date.includes(",") ? event.date.split(" ")[0] : event.date.split(" ")[1]}
-                    </span>
-                  </div>
+            {loading ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">Loading events...</p>
+              </div>
+            ) : events.length === 0 ? (
+              <div className="text-center py-12">
+                <Calendar className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-foreground mb-2">No Upcoming Events</h3>
+                <p className="text-muted-foreground">
+                  Check back soon for new events and activities!
+                </p>
+              </div>
+            ) : (
+              events.map((event, index) => (
+                <motion.article
+                  key={event.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-shadow duration-300"
+                >
+                  <div className="flex flex-col md:flex-row">
+                    {/* Event Image */}
+                    {event.image_url && (
+                      <div className="md:w-64 h-48 md:h-auto flex-shrink-0">
+                        <img
+                          src={event.image_url}
+                          alt={event.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
 
-                  {/* Content */}
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between gap-4 mb-2">
-                      <h3 className="text-xl font-serif font-semibold text-foreground">
-                        {event.title}
-                      </h3>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${typeColors[event.type]}`}>
-                        {event.type}
-                      </span>
+                    {/* Content */}
+                    <div className="flex-1 p-6">
+                      <div className="flex flex-col md:flex-row md:items-start gap-4">
+                        {/* Date Box */}
+                        <div className="flex-shrink-0 w-20 h-20 rounded-xl gradient-sage flex flex-col items-center justify-center text-primary-foreground">
+                          <span className="text-2xl font-bold">
+                            {new Date(event.event_date).getDate()}
+                          </span>
+                          <span className="text-sm opacity-80">
+                            {new Date(event.event_date).toLocaleDateString("en-US", { month: "short" })}
+                          </span>
+                        </div>
+
+                        {/* Text Content */}
+                        <div className="flex-1">
+                          <h3 className="text-xl font-serif font-semibold text-foreground mb-2">
+                            {event.title}
+                          </h3>
+                          {event.description && (
+                            <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+                              {event.description}
+                            </p>
+                          )}
+                          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                            <span className="flex items-center gap-1.5">
+                              <Clock className="w-4 h-4" />
+                              {new Date(event.event_date).toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
+                            {event.location && (
+                              <span className="flex items-center gap-1.5">
+                                <MapPin className="w-4 h-4" />
+                                {event.location}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                      {event.description}
-                    </p>
-                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
-                      <span className="flex items-center gap-1.5">
-                        <Clock className="w-4 h-4" />
-                        {event.time}
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <MapPin className="w-4 h-4" />
-                        {event.location}
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <Users className="w-4 h-4" />
-                        {event.attendees} attending
-                      </span>
-                    </div>
-                    <Button variant="soft" size="sm">
-                      Register Now
-                    </Button>
                   </div>
-                </div>
-              </motion.article>
-            ))}
+                </motion.article>
+              ))
+            )}
           </div>
         </div>
       </section>

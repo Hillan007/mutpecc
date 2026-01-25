@@ -1,62 +1,44 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Play, Calendar, User } from "lucide-react";
+import { Play, Calendar, User, Video } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingButtons } from "@/components/FloatingButtons";
+import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
-// Sample vlog data - would come from database in real app
-const vlogs = [
-  {
-    id: 1,
-    title: "Managing Anxiety: Practical Tips",
-    description: "Learn effective techniques for managing daily anxiety and finding calm in challenging moments.",
-    youtubeId: "dQw4w9WgXcQ",
-    author: "Dr. Sarah Mitchell",
-    date: "Jan 15, 2024",
-  },
-  {
-    id: 2,
-    title: "The Power of Self-Compassion",
-    description: "Discover why being kind to yourself is the foundation of mental wellness.",
-    youtubeId: "dQw4w9WgXcQ",
-    author: "Coach James Obi",
-    date: "Jan 12, 2024",
-  },
-  {
-    id: 3,
-    title: "Building Healthy Relationships",
-    description: "Understanding boundaries and communication for stronger connections.",
-    youtubeId: "dQw4w9WgXcQ",
-    author: "Dr. Linda Chen",
-    date: "Jan 8, 2024",
-  },
-  {
-    id: 4,
-    title: "Overcoming Depression: First Steps",
-    description: "A gentle guide to taking the first steps when you're feeling low.",
-    youtubeId: "dQw4w9WgXcQ",
-    author: "Dr. Sarah Mitchell",
-    date: "Jan 5, 2024",
-  },
-  {
-    id: 5,
-    title: "Mindfulness for Beginners",
-    description: "Simple mindfulness practices you can start today for better mental clarity.",
-    youtubeId: "dQw4w9WgXcQ",
-    author: "Coach Maria Santos",
-    date: "Dec 28, 2023",
-  },
-  {
-    id: 6,
-    title: "Healing from Trauma",
-    description: "Understanding the healing process and finding hope after difficult experiences.",
-    youtubeId: "dQw4w9WgXcQ",
-    author: "Dr. James Obi",
-    date: "Dec 20, 2023",
-  },
-];
+type Vlog = Database["public"]["Tables"]["vlogs"]["Row"];
+
+const extractVideoId = (url: string): string | null => {
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/);
+  return match ? match[1] : null;
+};
 
 const Vlog = () => {
+  const [vlogs, setVlogs] = useState<Vlog[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchVlogs();
+  }, []);
+
+  const fetchVlogs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("vlogs")
+        .select("*")
+        .eq("is_published", true)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      if (data) setVlogs(data);
+    } catch (error) {
+      console.error("Error fetching vlogs:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -89,52 +71,92 @@ const Vlog = () => {
       {/* Vlogs Grid */}
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {vlogs.map((vlog, index) => (
-              <motion.article
-                key={vlog.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-shadow duration-300 group"
-              >
-                {/* Thumbnail */}
-                <div className="relative aspect-video bg-muted">
-                  <img
-                    src={`https://img.youtube.com/vi/${vlog.youtubeId}/maxresdefault.jpg`}
-                    alt={vlog.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-foreground/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-elevated">
-                      <Play className="w-6 h-6 text-primary-foreground ml-1" />
-                    </div>
-                  </div>
-                </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Loading vlogs...</p>
+            </div>
+          ) : vlogs.length === 0 ? (
+            <div className="text-center py-12 max-w-md mx-auto">
+              <Video className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">No Vlogs Yet</h3>
+              <p className="text-muted-foreground">
+                Check back soon for wellness videos and insights!
+              </p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {vlogs.map((vlog, index) => {
+                const videoId = extractVideoId(vlog.youtube_url);
+                const thumbnailUrl = vlog.thumbnail_url || (videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null);
 
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-xl font-serif font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                    {vlog.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                    {vlog.description}
-                  </p>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1.5">
-                      <User className="w-4 h-4" />
-                      {vlog.author}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4" />
-                      {vlog.date}
-                    </span>
-                  </div>
-                </div>
-              </motion.article>
-            ))}
-          </div>
+                return (
+                  <motion.article
+                    key={vlog.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-shadow duration-300 group"
+                  >
+                    {/* Thumbnail */}
+                    <a
+                      href={vlog.youtube_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <div className="relative aspect-video bg-muted">
+                        {thumbnailUrl ? (
+                          <img
+                            src={thumbnailUrl}
+                            alt={vlog.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Video className="w-12 h-12 text-muted-foreground" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-foreground/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-elevated">
+                            <Play className="w-6 h-6 text-primary-foreground ml-1" />
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+
+                    {/* Content */}
+                    <div className="p-6">
+                      <a
+                        href={vlog.youtube_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <h3 className="text-xl font-serif font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                          {vlog.title}
+                        </h3>
+                      </a>
+                      {vlog.description && (
+                        <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-2">
+                          {vlog.description}
+                        </p>
+                      )}
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <span className="flex items-center gap-1.5">
+                          <Calendar className="w-4 h-4" />
+                          {new Date(vlog.created_at).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.article>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
