@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { Database } from "@/integrations/supabase/types";
+import askExecutiveBg from "@/assets/ask-executive-bg.jpg";
 
 type QAThread = Database["public"]["Tables"]["qa_threads"]["Row"];
 
@@ -118,9 +119,15 @@ const AskExecutive = () => {
       <Header />
       <FloatingButtons />
 
-      {/* Hero */}
-      <section className="pt-32 pb-12 lg:pt-40 lg:pb-16 gradient-hero">
-        <div className="container mx-auto px-4">
+      {/* Hero with Background Image */}
+      <section className="pt-32 pb-12 lg:pt-40 lg:pb-16 relative">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img src={askExecutiveBg} alt="Ask Executive background" className="w-full h-full object-cover opacity-30" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/80 to-background" />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
