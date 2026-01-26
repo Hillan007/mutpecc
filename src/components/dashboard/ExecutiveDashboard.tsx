@@ -19,6 +19,7 @@ import { UserManagement } from "./UserManagement";
 import { BookingManagement } from "./BookingManagement";
 import { ContentManager } from "./ContentManager";
 import { CommunityLinkManager } from "./CommunityLinkManager";
+import { QAManager } from "./QAManager";
 import type { Database } from "@/integrations/supabase/types";
 
 type CounselorApplication = Database["public"]["Tables"]["counselor_applications"]["Row"];
@@ -185,7 +186,7 @@ export function ExecutiveDashboard() {
 
       {/* Main Tabs */}
       <Tabs defaultValue="users" className="space-y-6">
-        <TabsList className="grid grid-cols-4 w-full max-w-2xl">
+        <TabsList className="grid grid-cols-5 w-full max-w-3xl">
           <TabsTrigger value="users" className="flex items-center gap-2">
             <Users className="w-4 h-4" />
             Users
@@ -193,6 +194,10 @@ export function ExecutiveDashboard() {
           <TabsTrigger value="bookings" className="flex items-center gap-2">
             <Calendar className="w-4 h-4" />
             Bookings
+          </TabsTrigger>
+          <TabsTrigger value="questions" className="flex items-center gap-2">
+            <MessageCircle className="w-4 h-4" />
+            Q&A
           </TabsTrigger>
           <TabsTrigger value="content" className="flex items-center gap-2">
             <Video className="w-4 h-4" />
@@ -210,6 +215,10 @@ export function ExecutiveDashboard() {
 
         <TabsContent value="bookings">
           <BookingManagement />
+        </TabsContent>
+
+        <TabsContent value="questions">
+          <QAManager />
         </TabsContent>
 
         <TabsContent value="content">
