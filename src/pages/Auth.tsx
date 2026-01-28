@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Heart, Mail, Lock, User, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { ForgotPasswordModal } from "@/components/ForgotPasswordModal";
+import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 
 const emailSchema = z.string().email("Please enter a valid email address");
@@ -12,30 +14,38 @@ const passwordSchema = z.string().min(6, "Password must be at least 6 characters
 const nameSchema = z.string().min(2, "Name must be at least 2 characters");
 
 const Auth = () => {
+  const [searchParams] = useSearchParams();
+  const isReset = searchParams.get("reset") === "true";
+  
   const [isLogin, setIsLogin] = useState(true);
+  const [isResetMode, setIsResetMode] = useState(isReset);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string; name?: string }>({});
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [errors, setErrors] = useState<{ email?: string; password?: string; name?: string; confirmPassword?: string }>({});
 
   const { user, signIn, signUp } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    if (user) {
+    if (user && !isResetMode) {
       navigate("/dashboard");
     }
-  }, [user, navigate]);
+  }, [user, navigate, isResetMode]);
 
   const validateForm = () => {
-    const newErrors: { email?: string; password?: string; name?: string } = {};
+    const newErrors: { email?: string; password?: string; name?: string; confirmPassword?: string } = {};
 
-    const emailResult = emailSchema.safeParse(email);
-    if (!emailResult.success) {
-      newErrors.email = emailResult.error.errors[0].message;
+    if (!isResetMode) {
+      const emailResult = emailSchema.safeParse(email);
+      if (!emailResult.success) {
+        newErrors.email = emailResult.error.errors[0].message;
+      }
     }
 
     const passwordResult = passwordSchema.safeParse(password);
@@ -43,7 +53,11 @@ const Auth = () => {
       newErrors.password = passwordResult.error.errors[0].message;
     }
 
-    if (!isLogin) {
+    if (isResetMode && password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    if (!isLogin && !isResetMode) {
       const nameResult = nameSchema.safeParse(fullName);
       if (!nameResult.success) {
         newErrors.name = nameResult.error.errors[0].message;
@@ -54,8 +68,39 @@ const Auth = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleResetPassword = async () => {
+    if (!validateForm()) return;
+    
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password });
+      
+      if (error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Password Updated!",
+          description: "Your password has been successfully changed.",
+        });
+        setIsResetMode(false);
+        navigate("/dashboard");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (isResetMode) {
+      handleResetPassword();
+      return;
+    }
     
     if (!validateForm()) return;
     
@@ -107,6 +152,8 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <ForgotPasswordModal isOpen={showForgotModal} onClose={() => setShowForgotModal(false)} />
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -136,10 +183,12 @@ const Auth = () => {
           {/* Title */}
           <div className="text-center mb-8">
             <h1 className="text-2xl font-serif font-bold text-foreground mb-2">
-              {isLogin ? "Welcome Back" : "Join Our Community"}
+              {isResetMode ? "Reset Password" : isLogin ? "Welcome Back" : "Join Our Community"}
             </h1>
             <p className="text-muted-foreground">
-              {isLogin
+              {isResetMode
+                ? "Enter your new password below"
+                : isLogin
                 ? "Sign in to access your dashboard"
                 : "Create an account to get started"}
             </p>
@@ -147,7 +196,7 @@ const Auth = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && (
+            {!isLogin && !isResetMode && (
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground">
                   Full Name
@@ -168,28 +217,30 @@ const Auth = () => {
               </div>
             )}
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                />
+            {!isResetMode && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                {errors.email && (
+                  <p className="text-sm text-destructive">{errors.email}</p>
+                )}
               </div>
-              {errors.email && (
-                <p className="text-sm text-destructive">{errors.email}</p>
-              )}
-            </div>
+            )}
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                Password
+                {isResetMode ? "New Password" : "Password"}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -217,6 +268,40 @@ const Auth = () => {
               )}
             </div>
 
+            {isResetMode && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">
+                  Confirm New Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                {errors.confirmPassword && (
+                  <p className="text-sm text-destructive">{errors.confirmPassword}</p>
+                )}
+              </div>
+            )}
+
+            {/* Forgot Password Link */}
+            {isLogin && !isResetMode && (
+              <div className="text-right">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotModal(true)}
+                  className="text-sm text-primary hover:underline"
+                >
+                  Forgot your password?
+                </button>
+              </div>
+            )}
+
             <Button
               type="submit"
               variant="hero"
@@ -226,6 +311,8 @@ const Auth = () => {
             >
               {isSubmitting
                 ? "Please wait..."
+                : isResetMode
+                ? "Update Password"
                 : isLogin
                 ? "Sign In"
                 : "Create Account"}
@@ -233,20 +320,22 @@ const Auth = () => {
           </form>
 
           {/* Toggle */}
-          <div className="mt-6 text-center">
-            <p className="text-muted-foreground">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}
-              <button
-                onClick={() => {
-                  setIsLogin(!isLogin);
-                  setErrors({});
-                }}
-                className="ml-1 text-primary font-medium hover:underline"
-              >
-                {isLogin ? "Sign Up" : "Sign In"}
-              </button>
-            </p>
-          </div>
+          {!isResetMode && (
+            <div className="mt-6 text-center">
+              <p className="text-muted-foreground">
+                {isLogin ? "Don't have an account?" : "Already have an account?"}
+                <button
+                  onClick={() => {
+                    setIsLogin(!isLogin);
+                    setErrors({});
+                  }}
+                  className="ml-1 text-primary font-medium hover:underline"
+                >
+                  {isLogin ? "Sign Up" : "Sign In"}
+                </button>
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Info */}
