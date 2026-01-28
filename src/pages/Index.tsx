@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Heart, Calendar, LogIn, UserPlus, Shield, Sparkles, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingButtons } from "@/components/FloatingButtons";
@@ -26,101 +25,94 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0a192f] text-white overflow-x-hidden">
       <Header />
       <FloatingButtons />
       <MoodCheckInModal isOpen={showMoodModal} onClose={() => setShowMoodModal(false)} />
       <QuickBookModal isOpen={showQuickBook} onClose={() => setShowQuickBook(false)} />
 
-      {/* Hero & Main Actions */}
-      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 min-h-[90vh] flex items-center">
-        {/* Background Overlay */}
+      {/* Hero Section - Optimized for height */}
+      <section className="relative pt-20 pb-10 md:pt-32 md:pb-20 min-h-[100vh] lg:min-h-[90vh] flex items-center">
+        {/* Background Overlay with Navy Theme */}
         <div className="absolute inset-0 z-0">
-          <img src={heroBg} alt="Calming background" className="w-full h-full object-cover opacity-40" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/80 to-background" />
+          <img src={heroBg} alt="Background" className="w-full h-full object-cover opacity-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a192f]/60 via-[#0a192f] to-[#0a192f]" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
             
-            {/* Left Side: Value Prop */}
+            {/* Left Side: Value Prop - Compressed for Mobile */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-center lg:text-left"
             >
-              <span className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full text-primary text-sm font-semibold mb-6">
-                <Sparkles className="w-4 h-4" />
-                Ready to start your healing journey?
+              <span className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-[#0070f3] text-xs font-bold mb-4 uppercase tracking-wider">
+                <Sparkles className="w-3 h-3" />
+                Healing Journey Starts Here
               </span>
-              <h1 className="text-5xl md:text-6xl font-serif font-bold text-foreground leading-tight mb-6">
-                Professional support for your <span className="text-primary border-b-4 border-primary/20">mental peace.</span>
+              <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4">
+                Mental Peace <br />
+                <span className="text-[#0070f3]">Simplified.</span>
               </h1>
-              <p className="text-lg text-muted-foreground mb-8 max-w-lg">
-                Book a session with a certified counselor or join our supportive community today. Your privacy is 100% guaranteed.
+              <p className="text-base md:text-lg text-slate-400 mb-6 max-w-md mx-auto lg:mx-0">
+                Secure, professional counseling and community support. 100% private.
               </p>
               
-              <div className="flex items-center gap-4 text-sm font-medium text-muted-foreground">
+              {/* Trust Badge - Hidden on very small screens to save space */}
+              <div className="hidden sm:flex items-center justify-center lg:justify-start gap-4 text-xs font-medium text-slate-500">
                 <div className="flex -space-x-2">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="w-8 h-8 rounded-full bg-primary/20 border-2 border-background" />
+                    <div key={i} className="w-7 h-7 rounded-full bg-slate-800 border-2 border-[#0a192f]" />
                   ))}
                 </div>
                 <span>Joined by 500+ members this month</span>
               </div>
             </motion.div>
 
-            {/* Right Side: Direct Action Cards */}
+            {/* Right Side: Action Grid - 2x2 on Mobile to avoid scrolling */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="grid gap-4 sm:grid-cols-2"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="grid grid-cols-2 gap-3 md:gap-4"
             >
-              {/* Primary Action: Book */}
+              {/* Primary Action: Book - Spans 2 columns on mobile for prominence */}
               <button 
                 onClick={() => setShowQuickBook(true)}
-                className="flex flex-col items-start p-6 bg-primary text-primary-foreground rounded-2xl shadow-xl hover:translate-y-[-4px] transition-all group text-left"
+                className="col-span-2 flex items-center justify-between p-5 bg-[#0070f3] text-white rounded-xl shadow-lg shadow-blue-900/20 hover:bg-blue-600 transition-all group"
               >
-                <Calendar className="w-8 h-8 mb-4 opacity-80" />
-                <h3 className="text-xl font-bold mb-1">Book a Session</h3>
-                <p className="text-sm opacity-90 mb-4">Talk to a professional counselor privately.</p>
-                <div className="mt-auto flex items-center gap-2 font-semibold">
-                  Quick Book <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <div className="flex items-center gap-4">
+                    <Calendar className="w-6 h-6 md:w-8 md:h-8" />
+                    <div className="text-left">
+                        <h3 className="font-bold text-lg leading-tight">Book Session</h3>
+                        <p className="text-xs opacity-80">Talk to a professional</p>
+                    </div>
                 </div>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
 
               {/* Action: Log In */}
-              <Link to="/auth" className="flex flex-col items-start p-6 bg-card border-2 border-border rounded-2xl shadow-sm hover:border-primary/50 transition-all text-left">
-                <LogIn className="w-8 h-8 mb-4 text-primary" />
-                <h3 className="text-xl font-bold mb-1">Member Login</h3>
-                <p className="text-sm text-muted-foreground mb-4">Access your dashboard and past sessions.</p>
-                <div className="mt-auto flex items-center gap-2 text-primary font-semibold">
-                  Sign In <ArrowRight className="w-4 h-4" />
-                </div>
+              <Link to="/auth" className="flex flex-col items-center justify-center p-4 bg-[#112240] border border-slate-700 rounded-xl hover:border-[#0070f3] transition-all text-center">
+                <LogIn className="w-6 h-6 mb-2 text-[#0070f3]" />
+                <span className="font-bold text-sm">Login</span>
               </Link>
 
               {/* Action: Mood Check */}
               <button 
                 onClick={() => setShowMoodModal(true)}
-                className="flex flex-col items-start p-6 bg-card border-2 border-border rounded-2xl shadow-sm hover:border-primary/50 transition-all text-left"
+                className="flex flex-col items-center justify-center p-4 bg-[#112240] border border-slate-700 rounded-xl hover:border-rose-500 transition-all text-center"
               >
-                <Heart className="w-8 h-8 mb-4 text-rose-500" />
-                <h3 className="text-xl font-bold mb-1">Mood Check-in</h3>
-                <p className="text-sm text-muted-foreground mb-4">Not sure how you feel? Take a quick assessment.</p>
-                <div className="mt-auto flex items-center gap-2 text-primary font-semibold">
-                  Start Check <ArrowRight className="w-4 h-4" />
-                </div>
+                <Heart className="w-6 h-6 mb-2 text-rose-500" />
+                <span className="font-bold text-sm">Mood</span>
               </button>
 
-              {/* Action: Join */}
-              <Link to="/community" className="flex flex-col items-start p-6 bg-secondary rounded-2xl shadow-sm hover:bg-secondary/80 transition-all text-left">
-                <UserPlus className="w-8 h-8 mb-4 text-foreground" />
-                <h3 className="text-xl font-bold mb-1">Join Community</h3>
-                <p className="text-sm text-muted-foreground mb-4">Connect with our supportive community.</p>
-                <div className="mt-auto flex items-center gap-2 font-semibold">
-                  Get Started <ArrowRight className="w-4 h-4" />
-                </div>
+              {/* Action: Join - Spans 2 columns on mobile */}
+              <Link to="/community" className="col-span-2 flex items-center justify-center gap-3 p-4 bg-slate-800/50 border border-slate-700 rounded-xl hover:bg-slate-800 transition-all">
+                <UserPlus className="w-5 h-5 text-slate-300" />
+                <span className="font-bold text-sm">Join the Community</span>
               </Link>
             </motion.div>
 
@@ -128,25 +120,18 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Trust Section: Simple & Clean */}
-      <section className="py-16 bg-secondary/30">
+      {/* Trust Section - Extremely Compact */}
+      <section className="py-8 bg-[#020c1b] border-y border-slate-800">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="flex items-center gap-3">
-              <Shield className="w-10 h-10 text-primary/60" />
-              <div>
-                <p className="font-bold">Confidential</p>
-                <p className="text-xs text-muted-foreground">End-to-end encryption</p>
-              </div>
+          <div className="flex flex-wrap justify-around gap-6 opacity-60">
+            <div className="flex items-center gap-2">
+              <Shield className="w-5 h-5 text-[#0070f3]" />
+              <span className="text-xs font-bold uppercase tracking-widest text-slate-300">Confidential</span>
             </div>
-            <div className="flex items-center gap-3">
-              <Users className="w-10 h-10 text-primary/60" />
-              <div>
-                <p className="font-bold">Verified</p>
-                <p className="text-xs text-muted-foreground">Certified Counselors</p>
-              </div>
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-[#0070f3]" />
+              <span className="text-xs font-bold uppercase tracking-widest text-slate-300">Verified</span>
             </div>
-            {/* Add two more trust markers here */}
           </div>
         </div>
       </section>
