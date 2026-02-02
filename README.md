@@ -1,73 +1,127 @@
-# Welcome to your Lovable project
+# Mutpecc
 
-## Project info
+A comprehensive community wellness platform built with React, TypeScript, and Supabase. Mutpecc provides mood tracking, event management, community engagement, and professional counseling services.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Features
 
-## How can I edit this code?
+- **Mood Check-ins**: Daily mood tracking and mental health insights
+- **Dashboard**: Role-based dashboards for Members, Counselors, and Executives
+- **Community**: Community links and engagement features
+- **Events Management**: Create and manage community events
+- **Activities**: Track and organize activities
+- **Vlogs**: Share and manage video content
+- **Counselor Services**: Book sessions and apply for professional counseling
+- **Q&A Management**: Community question and answer system
+- **User Management**: Administrative user control and management
+- **Content Management**: Manage platform content
+- **Booking System**: Session booking and calendar management
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+**Frontend:**
+- React 18+ with TypeScript
+- Vite (build tool)
+- Tailwind CSS (styling)
+- shadcn-ui (UI components)
+- Vitest (testing)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+**Backend:**
+- Supabase (PostgreSQL database + auth)
+- Edge Functions
 
-Changes made via Lovable will be committed automatically to this repo.
+**Development:**
+- Node.js with Bun package manager
+- ESLint for code quality
+- PostCSS for CSS processing
 
-**Use your preferred IDE**
+## Getting Started
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Node.js 16+ (recommended: use [nvm](https://github.com/nvm-sh/nvm))
+- Bun or npm package manager
+- Git
 
-Follow these steps:
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to project directory
+cd mutpecc
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies using bun
+bun install
+# or with npm
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
+bun run dev
+# or with npm
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at `http://localhost:5173`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Development
 
-**Use GitHub Codespaces**
+```sh
+# Run tests
+bun run test
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Build for production
+bun run build
 
-## What technologies are used for this project?
+# Preview production build
+bun run preview
 
-This project is built with:
+# Lint code
+bun run lint
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Project Structure
 
-## How can I deploy this project?
+```
+src/
+├── components/        # React components
+│   ├── dashboard/    # Dashboard components (Member, Counselor, Executive)
+│   └── ui/           # shadcn-ui component library
+├── pages/            # Page components
+├── hooks/            # Custom React hooks
+├── lib/              # Utility functions
+├── integrations/     # External service integrations (Supabase)
+└── test/             # Test files
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+supabase/
+├── migrations/       # Database migrations
+└── functions/        # Edge functions
+```
 
-## Can I connect a custom domain to my Lovable project?
+## Database
 
-Yes, you can!
+The project uses Supabase (PostgreSQL) for data storage. Database migrations are located in the `supabase/migrations/` directory.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Environment Setup
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Create a `.env.local` file in the root directory with your Supabase credentials:
+
+```
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+## Contributing
+
+1. Create a feature branch (`git checkout -b feature/amazing-feature`)
+2. Commit changes (`git commit -m 'Add amazing feature'`)
+3. Push to branch (`git push origin feature/amazing-feature`)
+4. Open a Pull Request
+
+## License
+
+[Add your license information here]
+
+## Support
+
+For issues and questions, please open an issue in the repository.
