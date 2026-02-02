@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Menu, X, Heart, User, LogOut } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { Logo } from "@/components/Logo";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -30,11 +31,9 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl gradient-sage flex items-center justify-center shadow-soft">
-              <Heart className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-serif font-bold text-foreground">MUTPECC</span>
+          <Link to="/" className="flex items-center gap-2" aria-label="MUTPECC">
+            <Logo className="h-10 w-10 rounded-xl shadow-soft" />
+            <span className="sr-only">MUTPECC</span>
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1">

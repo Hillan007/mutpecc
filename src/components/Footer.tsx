@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Heart, Mail, Phone, MapPin } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 export function Footer() {
   return (
@@ -8,14 +9,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl gradient-sage flex items-center justify-center">
-                <Heart className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-serif font-bold">MUTPECC</span>
+            <div className="flex items-center gap-2" aria-label="MUTPECC">
+              <Logo className="h-10 w-10 rounded-xl" />
+              <span className="sr-only">MUTPECC</span>
             </div>
             <p className="text-background/70 text-sm leading-relaxed">
-              Mental health guidance and counseling platform. Creating a safe space 
+              Mental health guidance and counseling platform. Creating a safe space
               for healing, growth, and support.
             </p>
           </div>
@@ -75,8 +74,11 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-background/50 text-sm">
-            © 2024 MUTPECC. All rights reserved.
+          <p className="text-background/50 text-sm flex items-center gap-2">
+            © 2024
+            <Logo className="h-4 w-4" />
+            <span className="sr-only">MUTPECC</span>
+            . All rights reserved.
           </p>
           <p className="text-background/50 text-sm flex items-center gap-1">
             Made with <Heart className="w-3 h-3 text-coral-400" /> for mental wellness

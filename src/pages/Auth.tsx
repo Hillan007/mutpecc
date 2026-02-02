@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Heart, Mail, Lock, User, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+import { Logo } from "@/components/Logo";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -56,9 +57,9 @@ const Auth = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setIsSubmitting(true);
 
     try {
@@ -124,13 +125,9 @@ const Auth = () => {
 
         <div className="bg-card rounded-2xl shadow-elevated p-8">
           {/* Logo */}
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <div className="w-12 h-12 rounded-xl gradient-sage flex items-center justify-center shadow-soft">
-              <Heart className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <span className="text-2xl font-serif font-bold text-foreground">
-              MUTPECC
-            </span>
+          <div className="flex items-center justify-center gap-2 mb-6" aria-label="MUTPECC">
+            <Logo className="h-12 w-12 rounded-xl shadow-soft" />
+            <span className="sr-only">MUTPECC</span>
           </div>
 
           {/* Title */}
@@ -227,8 +224,8 @@ const Auth = () => {
               {isSubmitting
                 ? "Please wait..."
                 : isLogin
-                ? "Sign In"
-                : "Create Account"}
+                  ? "Sign In"
+                  : "Create Account"}
             </Button>
           </form>
 

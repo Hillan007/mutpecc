@@ -3,6 +3,7 @@ import { Heart, Target, Users, Award, CheckCircle } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingButtons } from "@/components/FloatingButtons";
+import { Logo } from "@/components/Logo";
 import aboutBg from "@/assets/about-bg.jpg";
 
 const values = [
@@ -41,7 +42,7 @@ const About = () => {
           <img src={aboutBg} alt="About us background" className="w-full h-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/80 to-background" />
         </div>
-        
+
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -51,15 +52,17 @@ const About = () => {
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
               <Heart className="w-4 h-4" />
-              About MUTPECC
+              About
+              <Logo className="h-4 w-4" />
+              <span className="sr-only">MUTPECC</span>
             </span>
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-foreground mb-6">
               Creating safe spaces for{" "}
               <span className="text-primary">healing & growth</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              MUTPECC is a mental health guidance and counseling platform dedicated to providing 
-              confidential, compassionate support for individuals seeking emotional wellness and 
+              MUTPECC is a mental health guidance and counseling platform dedicated to providing
+              confidential, compassionate support for individuals seeking emotional wellness and
               personal growth.
             </p>
           </motion.div>
@@ -80,13 +83,13 @@ const About = () => {
                 Our Mission
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                At MUTPECC, we believe that everyone deserves access to mental health support. 
-                Our platform connects individuals with trained counselors who understand the 
+                At MUTPECC, we believe that everyone deserves access to mental health support.
+                Our platform connects individuals with trained counselors who understand the
                 unique challenges of navigating emotional wellness.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-8">
-                We've built a tiered community where members can not only receive support but 
-                also grow to become counselors themselves, creating a sustainable cycle of 
+                We've built a tiered community where members can not only receive support but
+                also grow to become counselors themselves, creating a sustainable cycle of
                 healing and helping.
               </p>
               <ul className="space-y-3">

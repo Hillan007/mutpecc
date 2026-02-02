@@ -4,6 +4,7 @@ import { Play, Calendar, User, Video } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingButtons } from "@/components/FloatingButtons";
+import { Logo } from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -55,13 +56,15 @@ const Vlog = () => {
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
               <Play className="w-4 h-4" />
-              MUTPECC Vlogs
+              <Logo className="h-4 w-4" />
+              <span className="sr-only">MUTPECC</span>
+              Vlogs
             </span>
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-foreground mb-6">
               Wellness insights & <span className="text-primary">guidance</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Expert videos on mental health, personal growth, and emotional wellness 
+              Expert videos on mental health, personal growth, and emotional wellness
               from our team of counselors and coaches.
             </p>
           </motion.div>
