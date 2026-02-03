@@ -13,6 +13,7 @@ import AskExecutive from "./pages/AskExecutive";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Community from "./pages/Community";
+import Leaders from "./pages/Leaders";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/events" element={<Events />} />
             <Route path="/activities" element={<Activities />} />
             <Route path="/ask-executive" element={<AskExecutive />} />
+            <Route path="/leaders" element={<Leaders />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/community" element={<Community />} />

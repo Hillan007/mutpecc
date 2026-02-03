@@ -23,7 +23,7 @@ export function Footer() {
           <div>
             <h4 className="font-serif font-semibold text-lg mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              {["Home", "About", "Vlog", "Events", "Activities"].map((link) => (
+              {["Home", "About", "Vlog", "Events", "Activities", "Leaders"].map((link) => (
                 <li key={link}>
                   <Link
                     to={`/${link.toLowerCase()}`}
@@ -59,15 +59,19 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-background/70 text-sm">
                 <Mail className="w-4 h-4" />
-                hello@mutpecc.org
+                counsellor@mut.ac.ke
               </li>
               <li className="flex items-center gap-3 text-background/70 text-sm">
                 <Phone className="w-4 h-4" />
-                +1 (234) 567-890
+                0114713010
               </li>
               <li className="flex items-start gap-3 text-background/70 text-sm">
                 <MapPin className="w-4 h-4 mt-0.5" />
-                123 Wellness Street, Health City
+                Guidance Counselor’s Office (next to the engineering classes)
+              </li>
+              <li className="flex items-start gap-3 text-background/70 text-sm">
+                <MapPin className="w-4 h-4 mt-0.5" />
+                Club meetings: Thursdays at 5 PM, Room 7
               </li>
             </ul>
           </div>
@@ -75,7 +79,7 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-background/50 text-sm flex items-center gap-2">
-            © 2024
+            Mutpecc © 2026
             <Logo className="h-4 w-4" />
             <span className="sr-only">MUTPECC</span>
             . All rights reserved.

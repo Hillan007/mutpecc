@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/vlog", label: "Vlog" },
   { href: "/events", label: "Events" },
   { href: "/activities", label: "Activities" },
+  { href: "/leaders", label: "Leaders" },
   { href: "/ask-executive", label: "Ask Executive" },
 ];
 
