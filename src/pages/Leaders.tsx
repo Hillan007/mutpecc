@@ -23,16 +23,16 @@ const leaders = [
         image: "/people/leader-3.svg",
         bio: "Manages communications, documentation, and member support.",
     },
-     {
+    {
         name: "Abigail Waithaka",
         role: "Organizing Secretary",
-        image: "/people/leader-3.svg",
-        bio: "Event planning and coordination.",
+        image: "/people/leader-4.svg",
+        bio: "Event planning and coordinationg.",
     },
-     {
+    {
         name: "Daniel Silas",
         role: "Treasurer",
-        image: "/people/leader-3.svg",
+        image: "/people/leader-5.svg",
         bio: "Manages finances, budgeting, and resource allocation.",
     },
 ];
