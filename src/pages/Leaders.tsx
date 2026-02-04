@@ -18,7 +18,7 @@ const leaders = [
         bio: "Coordinates events, logistics, and volunteer engagement.",
     },
     {
-        name: "Paul",
+        name: "Paul Mutua",
         role: "Secretary",
         image: "/people/leader-3.svg",
         bio: "Manages communications, documentation, and member support.",
