@@ -13,7 +13,7 @@ const leaders = [
     },
     {
         name: "Regina",
-        role: "Vice President",
+        role: "Vice Chairperson",
         image: "/people/leader-2.svg",
         bio: "Coordinates events, logistics, and volunteer engagement.",
     },
