@@ -35,6 +35,12 @@ const leaders = [
         image: "/people/leader-5.svg",
         bio: "Manages finances, budgeting, and resource allocation.",
     },
+    {
+        name: "Lisper Njeri",
+        role: "Vice Secretary",
+        image: "/people/leader-6.svg",
+        bio: "Supports minutes, documentation, and member coordination.",
+    },
 ];
 
 const counselor = {
