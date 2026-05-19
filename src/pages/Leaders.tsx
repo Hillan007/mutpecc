@@ -6,31 +6,31 @@ import { Logo } from "@/components/Logo";
 
 const leaders = [
     {
-        name: "Victor",
+        name: "Victor Hillan",
         role: "Club Chairperson",
         image: "/people/leader-1.svg",
         bio: "Leads club initiatives, partnerships, and student outreach.",
     },
     {
-        name: "Regina",
+        name: "Regina Wambui",
         role: "Vice Chairperson",
         image: "/people/leader-2.svg",
         bio: "Coordinates events, logistics, and volunteer engagement.",
     },
     {
-        name: "Felister",
+        name: "Felister Kaarie",
         role: "Secretary",
         image: "/people/leader-3.svg",
         bio: "Manages communications, documentation, and member support.",
     },
     {
-        name: "Hesborn",
+        name: "Hesborn Mang'ong'o",
         role: "Organizing Secretary",
         image: "/people/leader-4.svg",
         bio: "Event planning and coordinationg.",
     },
     {
-        name: "Makena",
+        name: "Mauline Makena",
         role: "Treasurer",
         image: "/people/leader-5.svg",
         bio: "Manages finances, budgeting, and resource allocation.",
