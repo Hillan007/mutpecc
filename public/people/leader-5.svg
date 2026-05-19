@@ -1,18 +1,31 @@
-<svg width="320" height="320" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Eagle portrait">
   <defs>
-    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#F97316" />
-      <stop offset="100%" stop-color="#EA580C" />
+    <radialGradient id="bg5" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#081018" />
+      <stop offset="100%" stop-color="#05070a" />
+    </radialGradient>
+    <linearGradient id="feather" x1="0" x2="1">
+      <stop offset="0%" stop-color="#f6f1e6" />
+      <stop offset="100%" stop-color="#c9bba7" />
     </linearGradient>
   </defs>
-  <rect width="320" height="320" rx="160" fill="url(#grad)" />
-  <path d="M160 72C201 72 234 105 234 146C234 194 206 228 160 228C114 228 86 194 86 146C86 105 119 72 160 72Z" fill="#FFEDD5" />
-  <ellipse cx="160" cy="152" rx="54" ry="42" fill="#FDBA74" />
-  <circle cx="145" cy="144" r="5" fill="#7C2D12" />
-  <circle cx="175" cy="144" r="5" fill="#7C2D12" />
-  <path d="M148 162C154 166 166 166 172 162" stroke="#7C2D12" stroke-width="6" stroke-linecap="round" />
-  <path d="M126 102C118 90 112 76 114 64C128 66 140 72 150 82" fill="#FFEDD5" />
-  <path d="M194 102C202 90 208 76 206 64C192 66 180 72 170 82" fill="#FFEDD5" />
-  <path d="M134 194C146 202 174 202 186 194" stroke="#7C2D12" stroke-width="7" stroke-linecap="round" />
-  <text x="160" y="262" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#FFF7ED" font-weight="700">Giraffe</text>
+
+  <rect width="320" height="320" rx="160" fill="url(#bg5)" />
+
+  <g>
+    <circle cx="160" cy="140" r="92" fill="#3e3b35" />
+    <ellipse cx="160" cy="170" rx="52" ry="44" fill="url(#feather)" />
+    <!-- beak -->
+    <path d="M160 176 L176 166 L160 156 Z" fill="#e3a21a" />
+  </g>
+
+  <!-- eyes -->
+  <g>
+    <circle cx="138" cy="148" r="9" fill="#0b0b0b" />
+    <circle cx="182" cy="148" r="9" fill="#0b0b0b" />
+    <circle cx="136" cy="145" r="2.5" fill="#fff" />
+    <circle cx="180" cy="145" r="2.5" fill="#fff" />
+  </g>
+
+  <text x="160" y="282" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#fff" opacity="0.95">Eagle</text>
 </svg>

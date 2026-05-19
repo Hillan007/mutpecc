@@ -1,21 +1,56 @@
-<svg width="320" height="320" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lion portrait">
   <defs>
-    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+    <radialGradient id="bg" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#2b1b0f" />
+      <stop offset="100%" stop-color="#0b0a0a" />
+    </radialGradient>
+    <linearGradient id="fur" x1="0" x2="1">
       <stop offset="0%" stop-color="#F59E0B" />
-      <stop offset="100%" stop-color="#D97706" />
+      <stop offset="60%" stop-color="#D97706" />
+      <stop offset="100%" stop-color="#8b4300" />
+    </linearGradient>
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.45" />
+    </filter>
+    <linearGradient id="eyeGrad" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#e2e8f0" stop-opacity="0.6" />
     </linearGradient>
   </defs>
-  <rect width="320" height="320" rx="160" fill="url(#grad)" />
-  <circle cx="160" cy="160" r="88" fill="#FDBA74" />
-  <circle cx="160" cy="160" r="62" fill="#FFF7ED" />
-  <circle cx="138" cy="150" r="7" fill="#7C2D12" />
-  <circle cx="182" cy="150" r="7" fill="#7C2D12" />
-  <path d="M148 176C154 170 166 170 172 176" stroke="#7C2D12" stroke-width="8" stroke-linecap="round" />
-  <path d="M106 124C96 112 90 96 94 80C110 82 124 88 134 100" fill="#FDBA74" />
-  <path d="M214 124C224 112 230 96 226 80C210 82 196 88 186 100" fill="#FDBA74" />
-  <path d="M124 104C116 86 120 68 134 56C146 68 152 82 154 96" fill="#FDBA74" />
-  <path d="M196 104C204 86 200 68 186 56C174 68 168 82 166 96" fill="#FDBA74" />
-  <path d="M160 186C160 186 148 202 148 214H172C172 202 160 186 160 186Z" fill="#7C2D12" />
-  <path d="M120 206C128 196 144 190 160 190C176 190 192 196 200 206" stroke="#7C2D12" stroke-width="8" stroke-linecap="round" />
-  <text x="160" y="262" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#FFF7ED" font-weight="700">Lion</text>
+
+  <rect width="320" height="320" rx="160" fill="url(#bg)" />
+
+  <!-- cinematic vignette circle -->
+  <g filter="url(#softShadow)">
+    <circle cx="160" cy="140" r="100" fill="url(#fur)" />
+  </g>
+
+  <!-- mane subtle shapes -->
+  <path d="M60 130 C70 40, 250 40, 260 130 C250 200, 70 200, 60 130 Z" fill="#5b2f13" opacity="0.18" />
+  <path d="M70 140 C90 60, 230 60, 250 140 C230 210, 90 210, 70 140 Z" fill="#7a3b14" opacity="0.12" />
+
+  <!-- face base -->
+  <ellipse cx="160" cy="150" rx="56" ry="66" fill="#f7c27a" />
+  <ellipse cx="160" cy="165" rx="44" ry="48" fill="#ffd9a2" />
+
+  <!-- eyes -->
+  <g transform="translate(0, -6)">
+    <ellipse cx="136" cy="150" rx="10" ry="14" fill="#2b1b0f" />
+    <ellipse cx="184" cy="150" rx="10" ry="14" fill="#2b1b0f" />
+    <ellipse cx="134" cy="146" rx="4" ry="5" fill="url(#eyeGrad)" opacity="0.9" />
+    <ellipse cx="182" cy="146" rx="4" ry="5" fill="url(#eyeGrad)" opacity="0.9" />
+  </g>
+
+  <!-- nose and mouth -->
+  <path d="M152 178 C156 182, 164 182, 168 178" stroke="#4b2b16" stroke-width="4" stroke-linecap="round" fill="none" />
+  <path d="M160 174 C150 178, 150 186, 160 186 C170 186, 170 178, 160 174 Z" fill="#4b2b16" />
+
+  <!-- subtle whisker marks -->
+  <path d="M120 170 C130 168, 140 170, 150 170" stroke="#6b3a1a" stroke-width="1.6" stroke-linecap="round" opacity="0.6" />
+  <path d="M190 170 C180 168, 170 170, 160 170" stroke="#6b3a1a" stroke-width="1.6" stroke-linecap="round" opacity="0.6" />
+
+  <!-- cinematic highlight -->
+  <ellipse cx="110" cy="90" rx="60" ry="18" fill="#fff" opacity="0.03" />
+
+  <text x="160" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#fff" opacity="0.9">Lion</text>
 </svg>

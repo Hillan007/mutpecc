@@ -1,18 +1,37 @@
-<svg width="320" height="320" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wolf portrait">
   <defs>
-    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#22C55E" />
-      <stop offset="100%" stop-color="#16A34A" />
+    <radialGradient id="bg3" cx="50%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#0a0f1a" />
+      <stop offset="100%" stop-color="#041018" />
+    </radialGradient>
+    <linearGradient id="fur3" x1="0" x2="1">
+      <stop offset="0%" stop-color="#c8c7c5" />
+      <stop offset="100%" stop-color="#6b6a68" />
     </linearGradient>
   </defs>
-  <rect width="320" height="320" rx="160" fill="url(#grad)" />
-  <circle cx="160" cy="160" r="66" fill="#DCFCE7" />
-  <circle cx="160" cy="130" r="34" fill="#BBF7D0" />
-  <circle cx="148" cy="126" r="5" fill="#14532D" />
-  <circle cx="172" cy="126" r="5" fill="#14532D" />
-  <path d="M150 142C155 148 165 148 170 142" stroke="#14532D" stroke-width="6" stroke-linecap="round" />
-  <path d="M128 170C120 190 122 212 136 226" stroke="#14532D" stroke-width="10" stroke-linecap="round" />
-  <path d="M192 170C200 190 198 212 184 226" stroke="#14532D" stroke-width="10" stroke-linecap="round" />
-  <path d="M132 166C138 152 150 146 160 146C170 146 182 152 188 166" fill="#DCFCE7" />
-  <text x="160" y="262" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#052E16" font-weight="700">Monkey</text>
+
+  <rect width="320" height="320" rx="160" fill="url(#bg3)" />
+
+  <g>
+    <circle cx="160" cy="150" r="92" fill="url(#fur3)" />
+    <!-- snout -->
+    <ellipse cx="160" cy="176" rx="46" ry="34" fill="#f1f1f0" />
+    <!-- ears -->
+    <path d="M110 100 C118 74, 141 72, 150 100" fill="#8a8a88" />
+    <path d="M210 100 C202 74, 179 72, 170 100" fill="#8a8a88" />
+  </g>
+
+  <!-- eyes -->
+  <g>
+    <ellipse cx="138" cy="150" rx="8" ry="10" fill="#0b0b0b" />
+    <ellipse cx="182" cy="150" rx="8" ry="10" fill="#0b0b0b" />
+    <circle cx="136" cy="146" r="2.5" fill="#fff" />
+    <circle cx="180" cy="146" r="2.5" fill="#fff" />
+  </g>
+
+  <!-- nose -->
+  <path d="M152 180 C156 184, 164 184, 168 180" stroke="#242424" stroke-width="3" stroke-linecap="round" fill="none" />
+  <path d="M160 172 C150 176, 150 184, 160 188 C170 184, 170 176, 160 172 Z" fill="#242424" />
+
+  <text x="160" y="282" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#fff" opacity="0.95">Wolf</text>
 </svg>
