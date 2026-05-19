@@ -8,37 +8,37 @@ const leaders = [
     {
         name: "Victor Hillan",
         role: "Club Chairperson",
-        image: "https://source.unsplash.com/320x320/?lion,cinematic",
+        image: "/people/lion.png",
         bio: "Leads club initiatives, partnerships, and student outreach.",
     },
     {
         name: "Regina Wambui",
         role: "Vice Chairperson",
-        image: "https://source.unsplash.com/320x320/?tiger,cinematic",
+        image: "/people/elephant.png",
         bio: "Coordinates events, logistics, and volunteer engagement.",
     },
     {
         name: "Felister Kaarie",
         role: "Secretary",
-        image: "https://source.unsplash.com/320x320/?wolf,cinematic",
+        image: "/people/zebra.png",
         bio: "Manages communications, documentation, and member support.",
     },
     {
         name: "Hesborn Mang'ong'o",
         role: "Organizing Secretary",
-        image: "https://source.unsplash.com/320x320/?bear,cinematic",
+        image: "/people/chipmunk.png",
         bio: "Event planning and coordinationg.",
     },
     {
         name: "Mauline Makena",
         role: "Treasurer",
-        image: "https://source.unsplash.com/320x320/?eagle,cinematic",
+        image: "/people/fox.png",
         bio: "Manages finances, budgeting, and resource allocation.",
     },
     {
         name: "Lisper Njeri",
         role: "Vice Secretary",
-        image: "https://source.unsplash.com/320x320/?fox,cinematic",
+        image: "/people/owl.png",
         bio: "Supports minutes, documentation, and member coordination.",
     },
 ];
@@ -46,7 +46,7 @@ const leaders = [
 const counselor = {
     name: "Ms Goretti W. Runnoh",
     role: "School Guidance Counselor",
-    image: "https://source.unsplash.com/320x320/?owl,wise",
+    image: "/people/counselor.svg",
     bio: "M.A Counselling Psychology; B.A. Counselling Psychology; Higher Dip. in Counselling Psychology",
 };
 
